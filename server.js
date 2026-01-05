@@ -8,3 +8,11 @@ db.run(`CREATE TABLE IF NOT EXISTS books (
     date TEXT,
     color TEXT
 )`);
+
+const PORT = process.env.PORT || 3000;
+const express = require("express");
+const server = express();
+server.listen(PORT, () => {});
+server.use(express.json());
+
+console.log("Hej")
