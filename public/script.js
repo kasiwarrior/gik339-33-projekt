@@ -142,14 +142,14 @@ function getCategoryColor(category) {
 
 
 
-  // JUST NU: Använd Mock-data för att testa din design
-  const mockBooks = [
-    { id: 1, title: "Exempelbok 1", author: "Författare A", category: "Fantasy" },
-    { id: 2, title: "Exempelbok 2", author: "Författare B", category: "Romance" },
-    { id: 3, title: "Exempelbok 3", author: "Författare C", category: "Novels" }
-  ];
+  // // JUST NU: Använd Mock-data för att testa din design
+  // const mockBooks = [
+  //   { id: 1, title: "Exempelbok 1", author: "Författare A", category: "Fantasy" },
+  //   { id: 2, title: "Exempelbok 2", author: "Författare B", category: "Romance" },
+  //   { id: 3, title: "Exempelbok 3", author: "Författare C", category: "Novels" }
+  // ];
   
-  renderBooks(mockBooks); 
+  // renderBooks(mockBooks); 
 
 // 2. Render-funktionen: Ansvarar ENDAST för att rita ut HTML
 function renderBooks(books) {
@@ -198,23 +198,23 @@ function renderBooks(books) {
 // Starta appen
 window.addEventListener('load', fetchData);
 
-function setCurrentBook(id) {
-  // SIMULERAT SVAR (Istället för fetch)
-  const dummyBook = {
-    id: id,
-    title: "Simulerad Titel",
-    author: "Test Författare",
-    isbn: "123-456",
-    category: "Fantasy"
-  };
+// function setCurrentBook(id) {
+//   // SIMULERAT SVAR (Istället för fetch)
+//   const dummyBook = {
+//     id: id,
+//     title: "Simulerad Titel",
+//     author: "Test Författare",
+//     isbn: "123-456",
+//     category: "Fantasy"
+//   };
 
-  // Fyll formuläret
-  bookForm.title.value = dummyBook.title;
-  bookForm.author.value = dummyBook.author;
-  bookForm.isbn.value = dummyBook.isbn;
-  bookForm.category.value = dummyBook.category;
+//   // Fyll formuläret
+//   bookForm.title.value = dummyBook.title;
+//   bookForm.author.value = dummyBook.author;
+//   bookForm.isbn.value = dummyBook.isbn;
+//   bookForm.category.value = dummyBook.category;
 
-  // Spara ID för att veta att nästa submit ska vara en PUT
-  localStorage.setItem('currentId', dummyBook.id);
-  showNotification("Test-data laddad i formuläret!");
-}
+//   // Spara ID för att veta att nästa submit ska vara en PUT
+//   localStorage.setItem('currentId', dummyBook.id);
+//   showNotification("Test-data laddad i formuläret!");
+// }
