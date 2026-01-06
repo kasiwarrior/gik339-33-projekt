@@ -12,8 +12,9 @@ db.run(`CREATE TABLE IF NOT EXISTS books (
 const PORT = process.env.PORT || 3000;
 const express = require("express");
 const server = express();
-server.listen(PORT, () => {});
 server.use(express.json());
+server.use(express.static('public'))
+server.listen(PORT, () => {});
 
 console.log("Hello!");
 
