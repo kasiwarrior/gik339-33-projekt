@@ -15,4 +15,4 @@ const server = express();
 server.listen(PORT, () => {});
 server.use(express.json());
 
-console.log("Hej")
+console.log("Hello!");

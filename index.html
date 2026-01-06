@@ -1,58 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="shortcut icon" href="#" />
-    <title>Användarregistrering</title>
+    <title>Library</title>
   </head>
+
   <body class="min-h-[100vh] bg-gradient-to-b from-sky-300 to-sky-700 text-white">
     <header class="mt-10 text-center">
       <h1 class="text-3xl">Library</h1>
     </header>
+
     <main class="mt-10">
       <div class="w-[55rem] mx-auto mt-8 bg-black/15 p-3 rounded-lg">
-        <form id="userForm">
-          <div class="form-control my-4 mx-auto flex w-3/4 items-center">
-            <label for="firstName" class="mr-4 text-xl w-40">Titel</label>
-            <input class="text-slate-800 p-1 flex-1 rounded-md" type="text" name="firstName" />
+        <form id="bookForm">
+          <div class="my-4 mx-auto flex w-3/4 items-center">
+            <label class="mr-4 text-xl w-40">Title</label>
+            <input class="text-slate-800 p-1 flex-1 rounded-md" type="text" name="title" required />
           </div>
-          <div class="form-control my-4 mx-auto flex w-3/4 items-center">
-            <label for="lastName" class="mr-4 text-xl w-40">Author</label>
-            <input class="text-slate-800 p-1 flex-1 rounded-md" type="text" name="lastName" />
+
+          <div class="my-4 mx-auto flex w-3/4 items-center">
+            <label class="mr-4 text-xl w-40">Author</label>
+            <input class="text-slate-800 p-1 flex-1 rounded-md" type="text" name="author" required />
           </div>
-          <div class="form-control my-4 mx-auto flex w-3/4 items-center">
-            <label for="username" class="mr-4 text-xl w-40">ISBN</label>
-            <input class="text-slate-800 p-1 flex-1 rounded-md" type="text" name="username" />
+
+          <div class="my-4 mx-auto flex w-3/4 items-center">
+            <label class="mr-4 text-xl w-40">ISBN</label>
+            <input class="text-slate-800 p-1 flex-1 rounded-md" type="text" name="isbn" />
           </div>
-          <div class="form-control my-4 mx-auto flex w-3/4 items-center">
-            <label for="color" class="mr-4 text-xl w-40">Category</label>
-            <select class="bg-white text-slate-800 p-1 flex-1 rounded-md" name="color">
-              <option value="novels">Novels</option>
-              <option value="fantasy">Fantasy</option>
-              <option value="science-fiction">Science Fiction</option>
-              <option value="horror">Horror</option>
-              <option value="short-stories">Short Stories</option>
+
+          <div class="my-4 mx-auto flex w-3/4 items-center">
+            <label class="mr-4 text-xl w-40">Category</label>
+            <select class="bg-white text-slate-800 p-1 flex-1 rounded-md" name="category" required>
+              <option value="Novels">Novels</option>
+              <option value="Crime & Detective Fiction">Crime & Detective Fiction</option>
+              <option value="Thriller & Suspense">Thriller & Suspense</option>
+              <option value="Fantasy">Fantasy</option>
+              <option value="Science Fiction">Science Fiction</option>
+              <option value="Horror">Horror</option>
+              <option value="Romance">Romance</option>
+              <option value="Historical Fiction">Historical Fiction</option>
+              <option value="Short Stories">Short Stories</option>
+              <option value="Dystopian / Post-Apocalyptic">Dystopian / Post-Apocalyptic</option>
+              <option value="Feel-Good Fiction">Feel-Good Fiction</option>
             </select>
           </div>
-          <div class="form-control my-4 mx-auto flex w-3/4 items-center justify-end gap-4">
-            <button
-              class="px-4 py-1 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300"
-              type="reset"
-              name="clearUserForm">
+
+          <div class="my-4 mx-auto flex w-3/4 items-center justify-end gap-4">
+            <button class="px-4 py-1 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300" type="reset">
               Rensa
             </button>
-            <button
-              class="px-4 py-1 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300"
-              type="submit"
-              name="submitUserForm">
-              Skicka
+            <button class="px-4 py-1 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300" type="submit">
+              Spara
             </button>
           </div>
         </form>
       </div>
+
+      <div
+        id="toast"
+        class="hidden fixed top-5 right-5 bg-black/70 text-white px-4 py-2 rounded-lg shadow-lg"
+      ></div>
+
       <div id="listContainer"></div>
     </main>
 
