@@ -16,3 +16,21 @@ server.listen(PORT, () => {});
 server.use(express.json());
 
 console.log("Hello!");
+
+server.get("/books", (req, res) => {
+  const sql = "SELECT * FROM books";
+
+    db.all(sql, (err, rows) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+        } else {
+            res.json(rows);
+        }
+      });
+});
+
+server.post("/books", (req, res) => {
+    const {title, author, isbn, category } = req.body;
+
+    console.log(`${title} ${author} ${isbn} ${category}`)
+})
