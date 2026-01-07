@@ -66,7 +66,7 @@ server.post("/books", (req, res) => {
     console.log(`${title} ${author} ${isbn} ${category}`)
 
     const sql = `INSERT INTO books (title, author, isbn, category) VALUES (?, ?, ?, ?)`;
-    const params = [author, title, isbn, category]
+    const params = [title, author, isbn, category]
 
     db.run(sql, params, function(err) {
 
