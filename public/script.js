@@ -1,171 +1,46 @@
 const url = 'http://localhost:3000/books';
 
-// Hämta referenser till HTML-elementen (synkade med index.html)
-const bookForm = document.getElementById('bookForm'); // Matchar id i index.html
+// Hämta referenser till de element vi behöver manipulera i HTML-filen
+const bookForm = document.getElementById('bookForm');
 const listContainer = document.getElementById('listContainer');
 const toast = document.getElementById('toast');
 
+// Kör fetchData när sidan har laddats klart
 window.addEventListener('load', fetchData);
 
-// 1. Hämta alla böcker (R i CRUD) [cite: 156, 228]
+
+ // Hämtar alla böcker från vårt API och skickar dem vidare till render-funktionen.
+ 
 function fetchData() {
   fetch(url)
     .then((result) => result.json())
     .then((books) => {
       renderBooks(books);
     })
-    .catch(err => console.error("Kunde inte hämta data:", err));
-}
-
-// 2. Rendera listan dynamiskt (Krav: Får inte finnas i HTML från början) [cite: 232, 234]
-function renderBooks(books) {
-  if (books.length > 0) {
-    let html = `<ul class="w-3/4 my-3 mx-auto flex flex-wrap gap-2 justify-center">`;
-    books.forEach((book) => {
-      // Bestäm färg baserat på kategori (Krav: Grafisk aspekt styrd av data) 
-      const color = getCategoryColor(book.category);
-
-      html += `
-        <li
-          class="bg-${color}-200 basis-1/4 text-${color}-900 p-2 rounded-md border-2 border-${color}-400 flex flex-col justify-between shadow-sm">
-          <h3 class="font-bold">${book.title}</h3>
-          <p class="text-sm italic">av ${book.author}</p>
-          <p class="text-xs mt-1">ISBN: ${book.isbn || 'Saknas'}</p>
-          <div class="flex gap-2">
-            <button
-              class="border border-${color}-300 hover:bg-white/100 rounded-md bg-white/50 p-1 text-xs mt-2" 
-              onclick="setCurrentBook(${book.id})">
-              Ändra
-            </button>
-            <button 
-              class="border border-${color}-300 hover:bg-white/100 rounded-md bg-white/50 p-1 text-xs mt-2" 
-              onclick="deleteBook(${book.id})">
-              Ta bort
-            </button>
-          </div>
-        </li>`;
-    });
-    html += `</ul>`;
-
-    listContainer.innerHTML = html;
-  } else {
-    listContainer.innerHTML = '<p class="text-center">Biblioteket är tomt.</p>';
-  }
-}
-
-// 3. Förbered för uppdatering (Fyll formulär med befintlig data) [cite: 253, 255]
-function setCurrentBook(id) {
-  fetch(`${url}/${id}`)
-    .then((result) => result.json())
-    .then((book) => {
-      // Fyller i formulärets fält baserat på deras 'name'-attribut
-      bookForm.title.value = book.title;
-      bookForm.author.value = book.author;
-      bookForm.isbn.value = book.isbn;
-      bookForm.category.value = book.category;
-
-      // Sparar id dolt i localStorage (Krav: ID får inte synas i gränssnittet) [cite: 260, 262, 263]
-      localStorage.setItem('currentId', book.id);
-      showNotification("Boken har laddats in i formuläret.");
+    .catch(err => {
+      console.error("Kunde inte hämta data:", err);
+      showNotification("Ett fel uppstod när biblioteket skulle laddas.");
     });
 }
 
-// 4. Ta bort en resurs (D i CRUD) [cite: 159, 264]
-function deleteBook(id) {
-  if (confirm("Vill du verkligen ta bort denna bok?")) {
-    fetch(`${url}/${id}`, { method: 'DELETE' })
-      .then(() => {
-        fetchData(); // Uppdatera listan dynamiskt utan omladdning [cite: 270]
-        showNotification("Boken har tagits bort.");
-      });
-  }
-}
 
-// 5. Skapa eller Uppdatera (C och U i CRUD) [cite: 285, 286]
-bookForm.addEventListener('submit', handleSubmit);
-
-function handleSubmit(e) {
-  e.preventDefault(); // Förhindrar sidomladdning (SPA-krav) [cite: 225, 286]
-  
-  const id = localStorage.getItem('currentId');
-  
-  // Skapa objektet som ska skickas till servern [cite: 288]
-  const bookData = {
-    title: bookForm.title.value,
-    author: bookForm.author.value,
-    isbn: bookForm.isbn.value,
-    category: bookForm.category.value
-  };
-
-  // Om ett id finns i localStorage, lägg till det för att köra en PUT [cite: 188, 260]
-  if (id) {
-    bookData.id = id;
-  }
-
-  const request = new Request(url, {
-    method: id ? 'PUT' : 'POST', // Välj metod baserat på om vi ändrar eller skapar [cite: 157, 158]
-    headers: {
-      'content-type': 'application/json'
-    },
-    body: JSON.stringify(bookData)
-  });
-
-  fetch(request).then((response) => {
-    fetchData(); // Uppdatera listan [cite: 290]
-    localStorage.removeItem('currentId'); // Rensa id efter skickat formulär
-    bookForm.reset();
-    showNotification(id ? "Boken har uppdaterats!" : "Boken har lagts till!");
-  });
-}
-
-// Hjälpfunktioner
-function showNotification(message) {
-  toast.textContent = message;
-  toast.classList.remove('hidden'); // Visa rutan [cite: 293, 295]
-  setTimeout(() => {
-    toast.classList.add('hidden'); // Dölj efter 3 sekunder
-  }, 3000);
-}
-
-function getCategoryColor(category) {
-  // Mappar kategorier till Tailwind-färger (grafisk aspekt) [cite: 214, 237]
-  const colors = {
-    'Fantasy': 'purple',
-    'Romance': 'pink',
-    'Crime & Detective Fiction': 'red',
-    'Science Fiction': 'emerald',
-    'Horror': 'orange',
-    'Novels': 'sky'
-  };
-  return colors[category] || 'slate';
-}
-
-
-
-  // // JUST NU: Använd Mock-data för att testa din design
-  // const mockBooks = [
-  //   { id: 1, title: "Exempelbok 1", author: "Författare A", category: "Fantasy" },
-  //   { id: 2, title: "Exempelbok 2", author: "Författare B", category: "Romance" },
-  //   { id: 3, title: "Exempelbok 3", author: "Författare C", category: "Novels" }
-  // ];
-  
-  // renderBooks(mockBooks); 
-
-// 2. Render-funktionen: Ansvarar ENDAST för att rita ut HTML
+ // Tar emot en array av böcker och bygger upp HTML-strukturen för listan.
+ 
 function renderBooks(books) {
-  // Krav: Listan får inte finnas i HTML från början [cite: 232]
+  // Om det inte finns några böcker visar vi ett meddelande istället
   if (!books || books.length === 0) {
-    listContainer.innerHTML = '<p class="text-center text-slate-200">Inga böcker att visa.</p>';
+    listContainer.innerHTML = '<p class="text-center text-slate-200">Biblioteket är tomt.</p>';
     return;
   }
 
-  // Skapa basen för listan
+  // Skapa start-taggen för vår lista med Tailwind-grid
   let html = `<ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-11/12 mx-auto mt-8">`;
 
   books.forEach((book) => {
-    // Krav: En egenskap ska styra en grafisk aspekt (här: färg baserat på kategori) 
+    // Bestäm färg baserat på kategori (Krav: grafisk aspekt styrd av data)
     const color = getCategoryColor(book.category);
 
+    // Bygg upp varje listobjekt dynamiskt
     html += `
       <li class="bg-${color}-100 border-l-8 border-${color}-500 p-4 rounded-lg shadow-md flex flex-col justify-between text-slate-800">
         <div>
@@ -174,6 +49,7 @@ function renderBooks(books) {
           <span class="inline-block bg-${color}-200 text-${color}-800 text-xs px-2 py-1 rounded-full mt-2">
             ${book.category}
           </span>
+          <p class="text-xs text-slate-500 mt-2 italic">ISBN: ${book.isbn || 'N/A'}</p>
         </div>
         
         <div class="flex justify-end gap-2 mt-4">
@@ -189,32 +65,111 @@ function renderBooks(books) {
 
   html += `</ul>`;
   
-  // Krav: HTML skapas och läggas till i DOM-trädet dynamiskt [cite: 234, 235]
+  // Lägga till den färdiga HTML-strängen i vår behållare
   listContainer.innerHTML = html;
 }
 
 
+ // Hämtar en specifik bok och fyller i formuläret så användaren kan redigera.
 
-// Starta appen
-window.addEventListener('load', fetchData);
+function setCurrentBook(id) {
+  fetch(`${url}/${id}`)
+    .then((result) => result.json())
+    .then((book) => {
+      // Fyll i formulärets input-fält med bokens nuvarande data
+      bookForm.title.value = book.title;
+      bookForm.author.value = book.author;
+      bookForm.isbn.value = book.isbn;
+      bookForm.category.value = book.category;
 
-// function setCurrentBook(id) {
-//   // SIMULERAT SVAR (Istället för fetch)
-//   const dummyBook = {
-//     id: id,
-//     title: "Simulerad Titel",
-//     author: "Test Författare",
-//     isbn: "123-456",
-//     category: "Fantasy"
-//   };
+      // Spara ID i localStorage.
+      localStorage.setItem('currentId', book.id);
+      showNotification("Boken har laddats in i formuläret.");
+      
+      // Scrolla upp till formuläret för bättre användarupplevelse
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
 
-//   // Fyll formuläret
-//   bookForm.title.value = dummyBook.title;
-//   bookForm.author.value = dummyBook.author;
-//   bookForm.isbn.value = dummyBook.isbn;
-//   bookForm.category.value = dummyBook.category;
 
-//   // Spara ID för att veta att nästa submit ska vara en PUT
-//   localStorage.setItem('currentId', dummyBook.id);
-//   showNotification("Test-data laddad i formuläret!");
-// }
+ // Ta bort en bok.
+ 
+function deleteBook(id) {
+  if (confirm("Är du säker på att du vill radera denna bok?")) {
+    fetch(`${url}/${id}`, { method: 'DELETE' })
+      .then(() => {
+        // Uppdatera listan direkt utan att ladda om hela sidan (SPA-tänk)
+        fetchData(); 
+        showNotification("Boken raderades framgångsrikt.");
+      })
+      .catch(err => console.error("Fel vid borttagning:", err));
+  }
+}
+
+
+
+ 
+bookForm.addEventListener('submit', (e) => {
+  e.preventDefault(); // Stoppa sidan från att laddas om
+  
+  // Kontrollera om vi redigerar en befintlig bok
+  const id = localStorage.getItem('currentId');
+  
+  // Skapa objektet som ska skickas till servern
+  const bookData = {
+    title: bookForm.title.value,
+    author: bookForm.author.value,
+    isbn: bookForm.isbn.value,
+    category: bookForm.category.value
+  };
+
+  // Om vi har ett ID, lägg till det i objektet
+  if (id) {
+    bookData.id = id;
+  }
+
+  // Välj metod (PUT för uppdatering, POST för ny bok)
+  const method = id ? 'PUT' : 'POST';
+
+  fetch(url, {
+    method: method,
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(bookData)
+  })
+  .then(() => {
+    fetchData(); // Hämta den nya listan
+    bookForm.reset(); // Töm formuläret
+    localStorage.removeItem('currentId'); // Rensa redigerings-ID
+    showNotification(id ? "Boken har uppdaterats!" : "Boken har lagts till i biblioteket!");
+  })
+  .catch(err => console.error("Kunde inte spara:", err));
+});
+
+
+
+// Visar en tillfällig notis uppe i hörnet
+function showNotification(message) {
+  toast.textContent = message;
+  toast.classList.remove('hidden');
+  setTimeout(() => {
+    toast.classList.add('hidden');
+  }, 3000);
+}
+
+// Mappar kategorier till Tailwind-färger för att styla boken
+function getCategoryColor(category) {
+  const colors = {
+    'Fantasy': 'purple',
+    'Romance': 'pink',
+    'Crime & Detective Fiction': 'red',
+    'Science Fiction': 'emerald',
+    'Horror': 'orange',
+    'Novels': 'sky',
+    'Dystopian / Post-Apocalyptic': 'amber',
+    'Thriller & Suspense': 'rose'
+  };
+  // Returnera 'slate' (grå) om kategorin inte finns i listan ovan
+  return colors[category] || 'slate';
+}
