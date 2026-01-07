@@ -14,26 +14,26 @@
     </header>
 
     <main class="mt-10">
-      <div class="w-[55rem] mx-auto mt-8 bg-black/15 p-3 rounded-lg">
-        <form id="bookForm">
-          <div class="my-4 mx-auto flex w-3/4 items-center">
-            <label class="mr-4 text-xl w-40">Title</label>
-            <input class="text-slate-800 p-1 flex-1 rounded-md" type="text" name="title" required />
+      <div class="max-w-4xl w-full mx-auto mt-8 bg-black/15 p-4 sm:p-6 rounded-lg">
+        <form id="bookForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex flex-col sm:flex-row sm:items-center w-full">
+            <label class="text-lg sm:w-40 mb-1 sm:mb-0">Title</label>
+            <input class="text-slate-800 p-2 rounded-md flex-1 bg-white" type="text" name="title" required />
           </div>
 
-          <div class="my-4 mx-auto flex w-3/4 items-center">
-            <label class="mr-4 text-xl w-40">Author</label>
-            <input class="text-slate-800 p-1 flex-1 rounded-md" type="text" name="author" required />
+          <div class="flex flex-col sm:flex-row sm:items-center w-full">
+            <label class="text-lg sm:w-40 mb-1 sm:mb-0">Author</label>
+            <input class="text-slate-800 p-2 rounded-md flex-1 bg-white" type="text" name="author" required />
           </div>
 
-          <div class="my-4 mx-auto flex w-3/4 items-center">
-            <label class="mr-4 text-xl w-40">ISBN</label>
-            <input class="text-slate-800 p-1 flex-1 rounded-md" type="text" name="isbn" />
+          <div class="flex flex-col sm:flex-row sm:items-center w-full">
+            <label class="text-lg sm:w-40 mb-1 sm:mb-0">ISBN</label>
+            <input class="text-slate-800 p-2 rounded-md flex-1 bg-white" type="text" name="isbn" />
           </div>
 
-          <div class="my-4 mx-auto flex w-3/4 items-center">
-            <label class="mr-4 text-xl w-40">Category</label>
-            <select class="bg-white text-slate-800 p-1 flex-1 rounded-md" name="category" required>
+          <div class="flex flex-col sm:flex-row sm:items-center w-full">
+            <label class="text-lg sm:w-40 mb-1 sm:mb-0">Category</label>
+            <select class="bg-white text-slate-800 p-2 rounded-md flex-1" name="category" required>
               <option value="Novels">Novels</option>
               <option value="Crime & Detective Fiction">Crime & Detective Fiction</option>
               <option value="Thriller & Suspense">Thriller & Suspense</option>
@@ -48,13 +48,9 @@
             </select>
           </div>
 
-          <div class="my-4 mx-auto flex w-3/4 items-center justify-end gap-4">
-            <button class="px-4 py-1 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300" type="reset">
-              Rensa
-            </button>
-            <button class="px-4 py-1 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300" type="submit">
-              Spara
-            </button>
+          <div class="md:col-span-2 w-full flex flex-col sm:flex-row sm:justify-end gap-2">
+            <button class="w-full sm:w-auto px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300" type="reset">Rensa</button>
+            <button class="w-full sm:w-auto px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300" type="submit">Spara</button>
           </div>
         </form>
       </div>
